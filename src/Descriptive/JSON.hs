@@ -37,6 +37,7 @@ import           Data.Scientific
 import           Data.Function
 import           Data.Aeson hiding (Value(Object,Null,Array),object)
 import           Data.Aeson.Types (Value,parseMaybe)
+import           Data.Aeson.Key
 import qualified Data.Aeson.Types as Aeson
 import           Data.Bifunctor
 import           Data.Data
@@ -104,7 +105,7 @@ key k =
                           (liftM (Wrap doc) d))
        (\_ p ->
           do s <- get
-             case parseMaybe (const (s .: k))
+             case parseMaybe (const (s .: fromText k))
                              () of
                Nothing ->
                  return (Continued (Unit doc))
@@ -130,7 +131,7 @@ keyMaybe k =
                           (liftM (Wrap doc) d))
        (\_ p ->
           do s <- get
-             case parseMaybe (const (s .: k))
+             case parseMaybe (const (s .: fromText k))
                              () of
                Nothing ->
                  return (Succeeded Nothing)
